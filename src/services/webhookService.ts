@@ -1,4 +1,4 @@
-import { WebhookModel } from '../models/Webhooks';
+import { WebhookModel } from '../models/webhook';
 
 export const webhookService = {
   createWebhook: async (eventName: string, webhookUrl: string) => {
