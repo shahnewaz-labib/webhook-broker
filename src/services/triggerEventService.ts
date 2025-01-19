@@ -1,5 +1,5 @@
 import { WebhookModel } from '../models/webhook';
-import { webhookQueue } from '../queues/eventQueue';
+import { addWebhookJob } from '../queues/eventQueue';
 
 export const triggerEventService = {
   handleEvent: async (eventName: string, payload: any) => {
@@ -14,7 +14,7 @@ export const triggerEventService = {
       payload,
     };
 
-    await webhookQueue.add('webhookJob', jobData);
+    await addWebhookJob(jobData);
     return true;
   },
 };

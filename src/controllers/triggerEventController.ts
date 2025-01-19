@@ -12,7 +12,7 @@ export const triggerEventController = {
       if (!result) {
         res.status(404).json({ message: 'Event not found' });
       }
-        res.status(200).json({ message: 'Event triggered successfully' });
+        res.status(202).json({ message: 'Event triggered successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Internal server error', error });
     }
