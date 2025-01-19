@@ -7,6 +7,6 @@ triggerEventRouter.get('/ping', (req: Request, res: Response) => {
   res.json({ message: 'pong' });
 });
 
-triggerEventRouter.post('/:event-name', triggerEventController.triggerEvent);
+triggerEventRouter.post('/:eventName', triggerEventController.triggerEvent);
 
 export default triggerEventRouter;
