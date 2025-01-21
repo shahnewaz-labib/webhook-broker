@@ -1,4 +1,5 @@
-import { deadLetterQueue, mainQueue } from './queues/eventQueue';
+import { deadLetterQueue } from './queues/deadLetterQueue';
+import { mainQueue } from './queues/mainQueue';
 
 export const logState = async () => {
   const mqJobs = await mainQueue.getJobs([

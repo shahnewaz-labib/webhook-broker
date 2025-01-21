@@ -1,10 +1,7 @@
 import { Job, Worker, WorkerOptions } from 'bullmq';
 import axios from 'axios';
-import {
-  addDeadLetterQueueJob,
-  config,
-  deadLetterQueue,
-} from '../queues/eventQueue';
+import { addDeadLetterQueueJob } from '../queues/deadLetterQueue';
+import { config } from '../queues/config';
 
 const processDeadLetterJob = async (job: Job) => {
   const { webhookUrl, payload } = job.data;
@@ -21,7 +18,7 @@ const processDeadLetterJob = async (job: Job) => {
 
     if (job.attemptsMade + 1 >= (job.opts.attempts || 0)) {
       console.log(
-        `>> ${job.id} pushed to DLQ again (within processDeadLetterJob)`,
+        `>> ${job.id} pushed to DLQ again`,
       );
 
       await addDeadLetterQueueJob(job.data);

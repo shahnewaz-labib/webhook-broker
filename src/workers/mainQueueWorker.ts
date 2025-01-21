@@ -1,10 +1,7 @@
 import { Job, Worker, WorkerOptions } from 'bullmq';
 import axios from 'axios';
-import {
-  addDeadLetterQueueJob,
-  config,
-  deadLetterQueue,
-} from '../queues/eventQueue';
+import { addDeadLetterQueueJob } from '../queues/deadLetterQueue';
+import { config } from '../queues/config';
 
 const mainQueueWorkerOptions: WorkerOptions = {
   connection: config.redis,

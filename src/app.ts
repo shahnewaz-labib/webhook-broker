@@ -4,8 +4,10 @@ import router from './routes';
 import morgan from 'morgan';
 import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
-import { deadLetterQueue, mainQueue } from './queues/eventQueue';
+
 import { ExpressAdapter } from '@bull-board/express';
+import { deadLetterQueue } from './queues/deadLetterQueue';
+import { mainQueue } from './queues/mainQueue';
 
 dotenv.config();
 

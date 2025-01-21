@@ -1,5 +1,5 @@
 import { WebhookModel } from '../models/webhook';
-import { addMainQueueJob } from '../queues/eventQueue';
+import { addMainQueueJob } from '../queues/mainQueue';
 
 export const triggerEventService = {
   handleEvent: async (eventName: string, payload: any) => {
