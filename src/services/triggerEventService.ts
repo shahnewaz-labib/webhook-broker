@@ -8,13 +8,17 @@ export const triggerEventService = {
       return null;
     }
 
-    const jobData = {
-      eventName,
-      webhookUrl: webhook.webhookUrl,
-      payload,
-    };
+    const jobPromises = webhook.webhookUrl.map(async (url) => {
+      const jobData = {
+        eventName,
+        webhookUrl: url,
+        payload,
+      };
 
-    await addWebhookJob(jobData);
+      await addWebhookJob(jobData);
+    });
+
+    await Promise.all(jobPromises);
     return true;
   },
 };

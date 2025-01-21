@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import app from './app';
 import './workers/eventWorker';
+
 const PORT = process.env.PORT || 3000;
 
 mongoose

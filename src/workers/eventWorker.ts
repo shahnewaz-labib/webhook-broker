@@ -10,32 +10,32 @@ const workerOptions: WorkerOptions = {
   concurrency: parseInt(process.env.WORKER_COUNT || '1', 10),
 };
 
+const processJob = async (job: any) => {
+  const { eventName, webhookUrl, payload } = job.data;
+
+  console.log(
+    `Processing webhook for event: ${eventName} to URLs: ${webhookUrl} with payload:`,
+    payload,
+  );
+
+  try {
+    for (const url of webhookUrl) {
+      const response = await axios.post(url, payload);
+
+      console.log(`Successfully sent webhook to ${url}`);
+      console.log(`Status Code: ${response.status}`);
+      console.log(`Response Body: ${JSON.stringify(response.data)}`);
+    }
+  } catch (error) {
+    if (error) console.error(`Failed to send webhook: ${error}`);
+
+    throw error;
+  }
+};
+
 const webhookWorker = new Worker(
   'webhookQueue',
-  async (job) => {
-    const { eventName, webhookUrl, payload } = job.data;
-
-    // Process the job (e.g., send a webhook request)
-    console.log(
-      `Processing webhook for event: ${eventName} to URLs: ${webhookUrl} with payload:`,
-      payload,
-    );
-
-    try {
-      // Send HTTP POST request to each webhook URL
-      for (const url of webhookUrl) {
-        const response = await axios.post(url, payload);
-
-        console.log(`Successfully sent webhook to ${url}`);
-        console.log(`Status Code: ${response.status}`);
-        console.log(`Response Body: ${JSON.stringify(response.data)}`);
-      }
-    } catch (error) {
-      if (error) console.error(`Failed to send webhook: ${error}`);
-
-      throw error; // Re-throw the error to mark the job as failed
-    }
-  },
+  async (job) => processJob(job),
   workerOptions,
 );
 
@@ -50,3 +50,15 @@ webhookWorker.on('failed', (job, err) => {
 webhookWorker.on('ready', () => {
   console.log('Webhook worker is ready');
 });
+
+const logState = async () => {
+  const activeCount = await webhookQueue.getActiveCount();
+  const waitingCount = await webhookQueue.getWaitingCount();
+
+  console.log('=========================');
+  console.log(`Active jobs: ${activeCount}`);
+  console.log(`Waiting jobs: ${waitingCount}`);
+  console.log('=========================');
+};
+
+setInterval(logState, 1000);
