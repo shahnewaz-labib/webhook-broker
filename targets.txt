@@ -1,0 +1,3 @@
+POST http://localhost:3000/api/v0/trigger-event/test
+Content-Type: application/json
+@payload.json

@@ -1,5 +1,5 @@
 import { WebhookModel } from '../models/webhook';
-import { addWebhookJob } from '../queues/eventQueue';
+import { addMainQueueJob } from '../queues/mainQueue';
 
 export const triggerEventService = {
   handleEvent: async (eventName: string, payload: any) => {
@@ -9,13 +9,13 @@ export const triggerEventService = {
     }
 
     const jobPromises = webhook.webhookUrl.map(async (url) => {
-      const jobData = {
+      const jobData: MainQueueJob = {
         eventName,
         webhookUrl: url,
         payload,
       };
 
-      await addWebhookJob(jobData);
+      await addMainQueueJob(jobData);
     });
 
     await Promise.all(jobPromises);
